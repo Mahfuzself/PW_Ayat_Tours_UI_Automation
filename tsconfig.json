@@ -1,0 +1,36 @@
+{
+    "compilerOptions": {
+        "lib":["es2015","ES6", "dom", "es2015.promise"],
+        "target": "ESNext",
+        "strict": true,
+        "module": "commonjs",
+        "sourceMap": true,
+        "resolveJsonModule": true,
+        "types": [
+            "node"
+             
+        ],
+        "baseUrl": ".",
+        "paths": {
+            "@pages/*": [
+              "pages/mensretreat.page.ts/*",
+               
+            ],
+            "@fixtures/*": [
+                "fixtures/*"
+            ],                
+            // "@utils/*": [
+            //     "utils/*"
+            // ],
+            // "@testData/*": [
+               
+                
+            // ],
+            // "@base-function/*": [
+            //     "base-function/*"
+                
+                
+            // ]
+        }
+    }
+  }
