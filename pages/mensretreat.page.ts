@@ -22,11 +22,13 @@ export default class MensRetreatPage{
         participantemail : "(//span[normalize-space(text())='Log in']/following::input)[7]",
         participantphoneNumber : "(//span[normalize-space(text())='Log in']/following::input)[8]",
         Notes : "(//span[normalize-space(text())='Log in']/following::input)[9]",
-        cardNumber: '//input[@id="Field-numberInput"]',
+        cardNumber: '#Field-numberInput',
         cardexpdate:'//input[@id="Field-expiryInput"]',
         securitycode: '//input[@id="Field-cvcInput"]',
         Country:'//select[@id="Field-countryInput"]',
         zipcode:'//input[@id="Field-postalCodeInput"]',
+        pay:"(//button[contains(@class,'btn btn-block')])[1]",
+        card_number_text : '//label[@for="Field-numberInput"]',
 
         
     }
@@ -201,21 +203,73 @@ export default class MensRetreatPage{
         }
     }
     async inputCardNumber(){
-        let card_number = "4242424242424242"
-        const ele = await this.page.locator(this.MensRetreatLocator.cardNumber)
+        let card_number : any = "4242424242424242"
+         const ele = await this.page.frameLocator("//iframe[@allow='payment *; publickey-credentials-get *']").locator(this.MensRetreatLocator.cardNumber)
         try {
-           await ele.fill(card_number)
+            // await this.page.locator('//div[@class="p-CardNumberInput"]').click();
+            await ele.click()
+            console.log("Ok")
+            // await this.page.frameLocator("//iframe[@allow='payment *; publickey-credentials-get *']").locator('#Field-numberInput').fill(card_number)
+            await ele.fill(card_number)
         } catch (error) {
             throw new Error(`Mens Retreat >> Booking >> Select Number of booking >> input Promo code >> Click Terms and condution check box >> input participants info >> card number input field is not functional : could not found locator ${error}`)
         }
     }
     async inputCardExpDate(){
         let card_exp = "1225"
-        const ele = await this.page.locator(this.MensRetreatLocator.cardexpdate)
+        const ele = await this.page.frameLocator("//iframe[@allow='payment *; publickey-credentials-get *']").locator(this.MensRetreatLocator.cardexpdate)
         try {
            await ele.fill(card_exp)
         } catch (error) {
             throw new Error(`Mens Retreat >> Booking >> Select Number of booking >> input Promo code >> Click Terms and condution check box >> input participants info >> card exp date input field is not functional : could not found locator ${error}`)
+        }
+    }
+    async inputSecurity(){
+        let security_Code = "567"
+        const ele = await this.page.frameLocator("//iframe[@allow='payment *; publickey-credentials-get *']").locator(this.MensRetreatLocator.securitycode)
+        try {
+           await ele.fill(security_Code)
+        } catch (error) {
+            throw new Error(`Mens Retreat >> Booking >> Select Number of booking >> input Promo code >> Click Terms and condution check box >> input participants info >> Security Code input field is not functional : could not found locator ${error}`)
+        }
+    }
+    async inputZIP(){
+        let zip = "75001"
+        const ele = await this.page.frameLocator("//iframe[@allow='payment *; publickey-credentials-get *']").locator(this.MensRetreatLocator.zipcode)
+        try {
+           await ele.fill(zip)
+           await this.page.waitForTimeout(3000)
+        } catch (error) {
+            throw new Error(`Mens Retreat >> Booking >> Select Number of booking >> input Promo code >> Click Terms and condution check box >> input participants info >> Security Code input field is not functional : could not found locator ${error}`)
+        }
+    }
+    async selectCountry(){
+        const ele = await this.page.frameLocator("//iframe[@allow='payment *; publickey-credentials-get *']").locator(this.MensRetreatLocator.Country)
+        try {
+           await ele.selectOption({label:"United States"})
+        } catch (error) {
+            throw new Error(`Mens Retreat >> Booking >> Select Number of booking >> input Promo code >> Click Terms and condution check box >> input participants info >> Country   dropdown field is not functional : could not found locator ${error}`)
+        }
+    }
+    async ClickPayButton(){
+        const ele = await this.page.locator(this.MensRetreatLocator.pay)
+        try {
+           await ele.click({force:true})
+           await this.page.waitForTimeout(1000)
+           await ele.click({force:true})
+           
+        } catch (error) {
+            throw new Error(`Mens Retreat >> Booking >> Select Number of booking >> input Promo code >> Click Terms and condution check box >> input participants info >> Pay buttonis not functional : could not found locator ${error}`)
+        }
+    }
+    async VerifyCardNumberLabel(){
+        await this.page.waitForTimeout(2000)
+        console.log("Test")
+        const ele = await this.page.frameLocator("//iframe[@allow='payment *; publickey-credentials-get *']").locator(this.MensRetreatLocator.card_number_text)
+        try {
+           await expect(ele).toContainText("Card number")
+        } catch (error) {
+            throw new Error(`Mens Retreat >> Booking >> Select Number of booking >> input Promo code >> Click Terms and condution check box >> input participants info >> Card number input field label  is not correct : could not found locator ${error}`)
         }
     }
 }

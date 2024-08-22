@@ -9,7 +9,6 @@ const fixture = baseTest.extend<Mahfuz>({
     hey: "I am ",
 
 })
-
 export const test = fixture;
 export const assert = fixture.expect
 export const describe = fixture.describe;
